@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<!-- Update your html tag to include the itemscope and itemtype attributes -->
+<html itemscope itemtype="http://schema.org/Game">
+
+<head>
+    <!-- SOME METAINFO  -->
+    <title>{% block title %}{{ page_title }}{% endblock %}</title>
+    {% block stylesheets %}
+        <LINK href="{{ asset('assets/default/css/game.css') }}" rel="stylesheet" type="text/css">
+    {% endblock %}
+    <base target="_blank" />
+    <link rel="icon" type="image/ico" href="{{ asset('assets/default/art/favicon/scootwing.ico?') }}">
+    <!-- Add the following three tags inside head -->
+    <meta charset="UTF-8">
+    <meta itemprop="name" content="Pony Wings">
+    <meta itemprop="description" content="This would be a description of the content your users are sharing">
+    <meta itemprop="image" content="http://ponywings.nutcasenightmare.com">
+    <!-- IOS STUFF -->
+    <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent" />
+    <link rel="apple-touch-icon-precomposed" href="{{ asset('assets/default/art/icon/IconScootBack.png') }}" />
+    <link rel="apple-touch-startup-image" href="{{ asset('assets/default/art/loading.jpg') }}" />
+    <script>
+    function BlockMove(event) {
+        if (!gameIsLoaded || !menu.isGameOver) {
+            event.preventDefault();
+        }
+    }
+    var gameIsLoaded = false;
+    var gameIsMobile = false;
+    var notHomeScreened = gameIsMobile && !window.navigator.standalone;
+    </script>
+    <!--移动端版本兼容 end -->
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+    var xmlHttp;
+    function createxmlHttpRequest(){
+    if(window.ActiveXObject){
+        xmlHttp=new ActiveXObject("Microsoft.XMLHTTP");
+    }else if(window.XMLHttpRequest)
+        xmlHttp=new XMLHttpRequest();
+    }
+
+    function wxShare(data){
+            wx.config({
+                debug: false,
+                appId: data.wx_app_id,
+                timestamp: data.wx_timestamp,
+                nonceStr: data.wx_nonce_str,
+                signature: data.wx_signature,
+                jsApiList: [
+                    // 所有要调用的 API 都要加到这个列表中
+                    'onMenuShareTimeline',
+                    'onMenuShareAppMessage'
+                    ]
+                });
+            wx.ready(function () {
+                wx.onMenuShareAppMessage({
+                    title: data.wx_title,
+                    desc: data.wx_desc,
+                    link: data.wx_share_url,
+                    imgUrl: data.wx_img_url,
+                    trigger: function (res) {
+                        // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+                        //alert('用户点击发送给朋友');
+                    },
+                    success: function (res) {
+                        var url = '{{ url("_share",{t:"app"}) }}';
+                        createxmlHttpRequest();
+                        xmlHttp.open("GET",url);
+                        xmlHttp.send(null);
+
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+                wx.onMenuShareTimeline({
+                    title: data.wx_desc,
+                    desc: data.wx_desc,
+                    link: data.wx_share_url,
+                    imgUrl: data.wx_img_url,
+                    trigger: function (res) {
+                        // 不要尝试在trigger中使用ajax异步请求修改本次分享的内容，因为客户端分享操作是一个同步操作，这时候使用ajax的回包会还没有返回
+                        //alert('用户点击发送给朋友');
+                    },
+                    success: function (res) {
+                        var url = '{{ url("_share",{t:"timeline"}) }}';
+                        createxmlHttpRequest();
+                        xmlHttp.open("GET",url);
+                        xmlHttp.send(null);
+                    },
+                    cancel: function (res) {
+                        //alert('已取消');
+                    },
+                    fail: function (res) {
+                        //alert(JSON.stringify(res));
+                    }
+                });
+            });
+        }
+    </script>
+
+</head>
+
+<body onkeydown="if(gameIsLoaded){ kCont.keyDownHandler(event); }" onkeyup="if(gameIsLoaded){ kCont.keyUpHandler(event); }" onblur="if(gameIsLoaded){ kCont.down=false; menu.pause(); }" onmousedown="if(gameIsLoaded){ if(event.pageX<360||event.pageY>45){ kCont.down = true; } }" onmouseup="if(gameIsLoaded){ kCont.down = false; }" ontouchstart="if(gameIsLoaded){ if(event.touches[0].pageX<360||event.touches[0].pageY>45){ kCont.down = true; } } BlockMove(event);" ontouchend="if(gameIsLoaded){ kCont.down = false; }" ontouchcancel="if(gameIsLoaded){ kCont.down = false; }">
+{% block body %}{% endblock %}
+{% block javascripts %}
+{% endblock %}
+</body>
+</html>

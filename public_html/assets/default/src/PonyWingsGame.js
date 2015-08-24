@@ -1,0 +1,199 @@
+var PWG = {};
+PWG.timer_enterFrame = null;
+PWG.timer_draw = null;
+PWG.playGame = function() {
+    PWG.timer_enterFrame = setInterval(PWG.enterFrame, enterFrameRate);
+    PWG.timer_draw = setInterval(PWG.draw, drawFrameRate);
+}
+PWG.pauseGame = function() {
+    clearInterval(PWG.timer_enterFrame);
+    clearInterval(PWG.timer_draw);
+}
+PWG.enterFrame = function() {
+    prop.enterFrame();
+    pony.enterFrame();
+    background.enterFrame();
+    HUD.enterFrame();
+
+    // SCALE / TRANSLATE DEPENDING ON PONY
+    if (pony.startMoving) {
+        // PWG.gScale*=9;
+        // PWG.yDisp*=9;
+        PWG.gScale *= 9;
+        PWG.yDisp *= 9;
+        if (pony.coord.y < -100) {
+            PWG.yDisp += (pony.coord.y + 100) * 0.5;
+        } else {
+            PWG.yDisp += 0;
+        }
+        if (pony.touchGround3) {
+            PWG.gScale += 0.7;
+            PWG.yDisp += 100;
+        } else {
+            if (pony.coord.y < -100) {
+                PWG.gScale += 0.30;
+            } else {
+                PWG.gScale += 0.40;
+            }
+        }
+        PWG.gScale *= 0.1;
+        PWG.yDisp *= 0.1;
+        if (PWG.yDisp < -300) {
+            PWG.yDisp *= 3;
+            PWG.yDisp += -300;
+            PWG.yDisp *= 0.25;
+        }
+        // SPLAT
+        PWG.yDisp += PWG.shake;
+        PWG.shake *= -0.5;
+    }
+}
+PWG.draw = function() {
+    ctx.clearRect(0, 0, 960, 640); // Clear the canvas
+
+    // SCALE PROPER
+    ctx.save();
+    ctx.translate(100, 150 - PWG.yDisp * PWG.gScale);
+    ctx.scale(PWG.gScale, PWG.gScale);
+
+    background.draw(); // Background
+    prop.draw(); // Props like Trees
+    terrain.draw(pony.coord.x); // Terrain
+    pony.draw(); // Pony Player
+    prop.drawParasprites(); // Parasprites
+    HUD.draw(); // HUD
+
+    Mouth.draw(); //Mouth
+
+    // RESTORE
+    ctx.restore();
+
+}
+
+PWG.init = function() {
+    PWG.gScale = 1;
+    PWG.yDisp = -310;
+    PWG.shake = 0;
+    menu.init();
+    HUD.init();
+    background.init();
+    pony.init();
+    terrain.init();
+    prop.init();
+
+}
+
+PWG.artAssets = 10;
+PWG.loadArtAssets = function() {
+
+    if (gameIsMobile) {
+        PWG.artAssets -= 4;
+    }
+
+    pony.image.onload =
+        background.cloud.onload =
+        background.moutain.onload =
+        prop.image.tree.onload =
+        prop.image.parasprite.onload =
+        prop.image.burst.onload =
+        HUD.timerImage.onload =
+        //Mouth.image.onload =
+        Mouth.mouthUp.onload =
+        Mouth.mouthDown.onload =
+        terrain.chipImage.onload =
+        PWG.onAssetLoad;
+
+
+
+    background.cloud.src = "assets/default/art/Cloud.png";
+    background.moutain.src = "assets/default/art/moutain.png";
+    pony.image.src = "assets/default/art/Scootaloo.png";
+    prop.image.parasprite.src = "assets/default/art/Parasprite.png";
+    HUD.timerImage.src = "assets/default/art/Timer.png";
+    Mouth.mouthUp.src = "assets/default/art/mouthUp.png";
+    Mouth.mouthDown.src = "assets/default/art/mouthDown.png";
+    // Mouth.image.src = "art/mouth.png";
+
+    //薯片材质
+    //terrain.chipImage.src = "art/chip.jpg";
+
+    if (!gameIsMobile) {
+        background.cloud.src = "assets/default/art/Cloud.png";
+        background.moutain.src = "assets/default/art/moutain.png";
+        prop.image.tree.src = "assets/default/art/Tree.png";
+        prop.image.burst.src = "assets/default/art/Burst.png";
+
+
+        // Music
+        music.src = music_source;
+        music.addEventListener('canplaythrough', function() {
+            musicLoopInit();
+            PWG.musicLoaded = true;
+            PWG.onAssetLoad();
+        }, false);
+        music.load();
+
+        //sound
+        eat.src = eat_source;
+        eat.load();
+
+    }
+
+}
+PWG.showTip = function() {
+
+    // Remove Loading Screen
+    document.getElementById("loading").style.display = "none";
+    document.getElementById("game_container").style.display = "block";
+
+}
+PWG.tipEnd = function() {
+    // Music
+    music.play();
+    menu.toggleAudio();
+    document.getElementById("bmusic").className = "hud_button toggle";
+
+    // Remove Loading Screen
+    gameIsLoaded = true;
+    PWG.startTheGame();
+}
+PWG.inviteFriend = function() {
+    document.getElementById("invite").style.display = "block";
+}
+PWG.onAssetLoad = function() {
+    PWG.artAssets--;
+    //alert(PWG.artAssets);
+    document.getElementById("progress").textContent = "LOADING " + (100 - PWG.artAssets * 10) + "%";
+
+    if (PWG.artAssets == 0) {
+
+        //show start button
+        document.getElementById("start").style.display = "block";
+        document.getElementById("progress").style.display = "none";
+
+    }
+
+}
+PWG.startTheGame = function() {
+    PWG.enterFrame();
+    PWG.draw();
+    PWG.playGame();
+    document.getElementById("screen").style.display = "none";
+    document.getElementById("invite").style.display = "block";
+
+    // If Not Home Screen Web App
+    if (notHomeScreened && !PWG.alreadyNotified) {
+        menu.pause();
+        document.getElementById("homeScreen").style.display = "block";
+        PWG.alreadyNotified = true;
+    }
+}
+PWG.alreadyNotified = false;
+PWG.musicLoaded = false;
+
+var canvas;
+var ctx;
+var hudCanvas;
+var hudCTX;
+var mouthCanvas;
+var mouthCTX;

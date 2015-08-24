@@ -1,0 +1,413 @@
+/** TAGS **/
+
+body {
+    color: #FFF;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Arial, sans-serif;
+   background: rgb(69, 231, 194);
+
+
+}
+body.needRotate:after {
+    content:" ";
+    position: absolute;
+    z-index: 999;
+    width: 100%;
+    height: 100%;
+    background:transparent url('../art/rotate.png') no-repeat scroll center center;
+    background-size:cover;
+}
+body.needRotate:before{
+    content: " ";
+    position: absolute;
+    z-index: 9999;
+    width: 480px;
+    height: 300px;
+    left:50%;
+    top:50%;
+    margin-left: -240px;
+    margin-top: -150px;
+    background-size:208px 205px;
+    background:transparent url('../art/rotateHint.png') no-repeat scroll center center;
+
+    -webkit-animation-name: rotation;
+    -webkit-animation-duration: 3s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+
+    -o-animation-name: rotation;
+    -o-animation-duration: 3s;
+    -o-animation-timing-function: linear;
+    -o-animation-iteration-count: infinite;
+
+    -moz-animation-name: rotation;
+    -moz-animation-duration: 3s;
+    -moz-animation-timing-function: linear;
+    -moz-animation-iteration-count: infinite;
+
+
+    animation-name: rotation;
+    animation-duration: 3s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+
+}
+body.needRotate #content {
+    display: none;
+}
+canvas,
+#background,
+#screen,
+#screen>div {
+    width: 480px;
+    height: 300px;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+img {
+    border: 0;
+}
+/*
+#instructions #tips {
+    background: transparent url("../art/tips.png") no-repeat scroll left top;
+}*/
+
+#background {
+    background: rgba(20, 232, 255, 1);
+    background: -moz-linear-gradient(top, rgba(20, 232, 255, 1) 0%, rgba(150, 243, 199, 1) 100%);
+    background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(20, 232, 255, 1)), color-stop(100%, rgba(150, 243, 199, 1)));
+    background: -webkit-linear-gradient(top, rgba(20, 232, 255, 1) 0%, rgba(150, 243, 199, 1) 100%);
+    background: -o-linear-gradient(top, rgba(20, 232, 255, 1) 0%, rgba(150, 243, 199, 1) 100%);
+    background: -ms-linear-gradient(top, rgba(20, 232, 255, 1) 0%, rgba(150, 243, 199, 1) 100%);
+    background: linear-gradient(to bottom, rgba(20, 232, 255, 1) 0%, rgba(150, 243, 199, 1) 100%);
+    filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#14e8ff', endColorstr='#96f3c7', GradientType=0);
+}
+
+#loading {
+    width: 100%;
+    height: 100%;
+    background: url('../art/loading.jpg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+}
+
+#start,
+#progress {
+    display: none;
+    background: transparent url('../art/button/startGame.png') no-repeat scroll 50% 95%;
+    width: 169px;
+    height: 74px;
+    position: absolute;
+    left: 40%;
+    top: 75%;
+    -webkit-animation-name: blinker;
+    -webkit-animation-duration: 1s;
+    -webkit-animation-timing-function: linear;
+    -webkit-animation-iteration-count: infinite;
+    animation-name: blinker;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+#start {
+    width: 100%;
+    height: 100%;
+    left: 0px;
+    top: 0px;
+}
+#progress {
+    display: block;
+    background-image: none;
+    animation-name: none;
+    -webkit-animation-name: none;
+}
+
+@-webkit-keyframes blinker {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.0;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+
+@keyframes blinker {
+    0% {
+        opacity: 1.0;
+    }
+    50% {
+        opacity: 0.0;
+    }
+    100% {
+        opacity: 1.0;
+    }
+}
+@-webkit-keyframes rotation {
+    0% {
+        -webkit-transform:rotate(-90deg)  ;
+    }
+    50% {
+        -webkit-transform:rotate(0deg)  ;
+    }
+    100% {
+        -webkit-transform:rotate(-90deg)  ;
+    }
+}
+@-moz-keyframes rotation {
+    0% {
+        -moz-transform:rotate(-90deg)  ;
+    }
+    50% {
+        -moz-transform:rotate(0deg)  ;
+    }
+    100% {
+        -moz-transform:rotate(-90deg)  ;
+    }
+}
+@-o-keyframes rotation {
+    0% {
+        -o-transform:rotate(-90deg)  ;
+    }
+    50% {
+        -o-transform:rotate(0deg)  ;
+    }
+    100% {
+        -o-transform:rotate(-90deg)  ;
+    }
+}
+@keyframes rotation {
+    0% {
+        transform:rotate(-90deg)  ;
+    }
+    50% {
+        transform:rotate(0deg)  ;
+    }
+    100% {
+        transform:rotate(-90deg)  ;
+    }
+}
+
+
+
+/** CENTER **/
+
+.center0 {
+    height: 100%;
+}
+
+.center1 {
+    display: table;
+    width: 100%;
+    height: 100%;
+}
+
+.center2 {
+    display: table-cell;
+    vertical-align: top;
+    width: 400px;
+}
+
+
+/** HUD & SHTUFF **/
+
+.screenMenu {
+    width: 400px;
+    margin: 0 auto 0 auto;
+    display: none;
+}
+
+#screen > #ending {
+    display: none;
+    background: transparent url("../art/ending.jpg") no-repeat left top;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
+}
+
+#screen > #shade {
+    background-color: #000;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+}
+#screen > #invite {
+	display: none;
+	background:transparent url("../art/invite.png") no-repeat center center;
+    background-size: cover;
+}
+#hud_screen {
+    position: absolute;
+    top: 0;
+    left: 480px;
+    width: 0px;
+    height: 300px;
+    z-index: 1;
+}
+
+#hud_screen .hud_button {
+    width: 30px;
+    height: 30px;
+    margin-left: 5px;
+    background-color: #555;
+    float: right;
+    background: url('../art/Buttons.png');
+    cursor: pointer;
+}
+
+#instructions {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    background: transparent url("../art/tips.png") no-repeat scroll center center;
+    width: 480px;
+    height: 300px;
+        background-size: 65%;
+        background-repeat: no-repeat;
+    background-position: center center;
+}
+
+.hud_button#breset {
+    background-position: -120px 0;
+}
+
+.hud_button#bmusic {
+    background-position: -60px 0;
+}
+
+.hud_button#bmusic.toggle {
+    background-position: -90px 0;
+}
+
+.hud_button#bpause {
+    background-position: 0 0;
+}
+
+.hud_button#bpause.toggle {
+    background-position: -30px 0;
+}
+
+#gameover {
+    position: relative;
+    background: transparent url('../art/boardFont.png') no-repeat scroll center top;
+        background-size: contain;
+}
+
+#gameover #main.stats {
+    padding-bottom: 60px;
+}
+
+.title {
+    margin: 0 auto 0 auto;
+    background: url('../art/Font.png');
+    width: 300px;
+    height: 50px;
+}
+
+.stats {
+    margin: 0 auto 0 auto;
+    width: 250px;
+    overflow: hidden;
+    display: none;
+}
+
+.stats#main {
+    width: 330px;
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 0px;
+    padding-top: 50px;
+    display: block;
+}
+
+.stats > #score {
+    float: left;
+    width: 100px;
+}
+
+.stats > #desc {
+    float: left;
+    text-align: right;
+    margin-right: 10px;
+    width: 130px;
+    color: #E84298;
+    display: none;
+}
+
+#yougotta {
+    /*width:350px;*/
+    width: 320px;
+    height: 120px;
+    text-align: center;
+}
+
+#yougotta .gotta_button {
+    /*float: left;*/
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.gotta_button.social {
+    width: 55px;
+    height: 70px;
+    overflow: hidden;
+}
+
+
+/*#yougotta > #caption{
+	float:left;
+	width:100%;
+	text-align:center;
+	font-size:12px;
+}*/
+
+
+/*.fb_like {
+	overflow: hidden;
+}*/
+
+#homeScreen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 480px;
+    height: 90px;
+    background-color: #222;
+    display: none;
+}
+
+#homeScreen > img {
+    float: left;
+}
+
+#homeScreen > div {
+    float: left;
+    margin-left: 15px;
+    width: 300px;
+    text-align: left;
+}
+
+#homeScreen > div > #title {
+    color: #E84298;
+}
+
+#homeScreen > div > #title {
+    color: #E84298;
+}
+
+#gb_embed,
+#gb_mobile {
+    width: 50px;
+    height: 60px;
+    background: url('../art/button/EmbedMobile.png');
+}
+
+#gb_mobile {
+    background-position: -50px 0;
+}

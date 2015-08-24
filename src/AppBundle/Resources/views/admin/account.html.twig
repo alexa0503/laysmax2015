@@ -1,0 +1,59 @@
+{% extends 'AppBundle:admin:layout.html.twig' %}
+{% block content %}
+	{% if app.session.flashbag.has('success') is not empty %}
+		{% for flashMessage in app.session.flashbag.get('success') %}
+			<h2>{{ flashMessage | raw }}</h2>
+		{% endfor %}
+	{% else %}
+		{% form_theme form 'bootstrap_3_layout.html.twig' %}
+		<div class="panel panel-default">
+		<form class="form-horizontal" method="post" {{ form_enctype(form) }} action="{{ app.request.uri }}" name="form" novalidate="novalidate" id="form-user">
+
+				<div class="panel-heading">
+					<!--<div class="panel-btns">
+                            <a class="panel-close" href="">×</a>
+                            <a class="minimize" href="">−</a>
+                        </div>-->
+					<p>{{ form_errors(form) }}</p>
+				</div>
+				<div class="panel-body">
+					<div class="form-group">
+						{{ form_label(form.email, 'Email', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+						<div class="col-sm-10">
+							{{ form_widget(form.email, {'attr':{'class':'form-control', 'placeholder':'请输入Email'}}) }}
+							{{ form_errors(form.email) }}
+						</div>
+					</div>
+					<div class="form-group">
+						{{ form_label(form.password.first, '密码', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+						<div class="col-sm-10">
+							{{ form_widget(form.password.first, {'attr':{'class':'form-control', 'placeholder':'不能少于6个字符'}}) }}
+							{{ form_errors(form.password.first) }}
+						</div>
+					</div>
+
+					<div class="form-group">
+						{{ form_label(form.password.second, '密码', {'label_attr': {'class': 'col-sm-2 control-label'}}) }}
+						<div class="col-sm-10">
+							{{ form_widget(form.password.second, {'attr':{'class':'form-control', 'placeholder':''}}) }}
+							{{ form_errors(form.password.second) }}
+						</div>
+					</div>
+
+				</div><!-- panel-body -->
+				<div class="panel-footer">
+					<div class="row">
+						<div class="col-sm-10 col-sm-offset-2">
+							{{ form_rest(form) }}
+							<button class="btn btn-primary" type="submit" id="btn-submit">提 交</button>
+						</div>
+					</div>
+				</div>
+		</form>
+		</div><!-- panel -->
+	{% endif %}
+{% endblock %}
+{% block title %}账户设置{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+{% endblock %}
