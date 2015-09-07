@@ -21,7 +21,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="white-translucent" />
     <link rel="apple-touch-icon-precomposed" href="{{ asset('assets/default/art/icon/IconScootBack.png') }}" />
     <link rel="apple-touch-startup-image" href="{{ asset('assets/default/art/loading.jpg') }}" />
-    <script>
+
+       <script>
     function BlockMove(event) {
         if (!gameIsLoaded || !menu.isGameOver) {
             event.preventDefault();
@@ -66,10 +67,16 @@
                         //alert('用户点击发送给朋友');
                     },
                     success: function (res) {
-                        var url = '{{ url("_share",{t:"app"}) }}';
+
+                       var url = '{{ url("_share",{t:"app"}) }}';
                         createxmlHttpRequest();
                         xmlHttp.open("GET",url);
                         xmlHttp.send(null);
+
+
+                        document.getElementById("screen").style.display = "none";
+                        document.getElementById("invite").style.display = "none";
+                        menu.gameover();
 
                     },
                     cancel: function (res) {
@@ -93,6 +100,12 @@
                         createxmlHttpRequest();
                         xmlHttp.open("GET",url);
                         xmlHttp.send(null);
+
+
+                        document.getElementById("screen").style.display = "none";
+                        document.getElementById("invite").style.display = "none";
+                        menu.gameover();
+
                     },
                     cancel: function (res) {
                         //alert('已取消');

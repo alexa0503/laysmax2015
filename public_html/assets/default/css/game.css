@@ -1,3 +1,16 @@
+html,body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,select,textarea,p,blockquote,table,strong,th,td,frameset,frame,iframe,span,em,img,acronym,abbr{padding: 0;margin: 0;border:none;}table{border-collapse: collapse;border-spacing: 0;}img{ vertical-align:middle;}ol,ul,li{list-style: none;}address,caption,cite,code,dfn,th,var{font-weight: normal;font-style: normal;}h1,h2,h3,h4,h5,h6{font-size: 100%;}q:before,q:after{content: '';}input,select{ vertical-align:middle;}
+
+
+#content {
+    position: absolute;left:0px; top:0px;
+    width: 480px;
+    height: 300px;
+    transform-origin:0% 0%;
+    -webkit-transform-origin:0% 0%;
+    -ms-transform-origin:0% 0%;
+    -moz-transform-origin:0% 0%;
+    -o-transform-origin:0% 0%;    
+}
 /** TAGS **/
 
 body {
@@ -67,6 +80,7 @@ canvas,
     top: 0;
     left: 0;
 }
+
 
 img {
     border: 0;

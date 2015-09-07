@@ -63,7 +63,7 @@
                                         </div>
                                         <div class='stats' id='yougotta' style="display:block;">
                                             <div class='gotta_button'>
-                                                <img src="{{ asset('assets/default/art/button/actionBtn.png') }}" ontouchstart="PWG.inviteFriend();" onclick='PWG.inviteFriend();' />
+                                                <img src="{{ asset('assets/default/art/button/actionBtn.png') }}" ontouchstart='window.location="http://cms.m.yhd.com/sale/179250' onclick='window.location="http://cms.m.yhd.com/sale/179250";' />
                                             </div>
                                             <div class='gotta_button'>
                                                 <img src="{{ asset('assets/default/art/button/invite.png') }}" ontouchstart="PWG.inviteFriend();" onclick='PWG.inviteFriend();'/>
@@ -86,6 +86,11 @@
 {% endblock %}
 {% block javascripts %}
 {{ parent() }}
+
+
+
+     <script src="{{ asset('assets/default/src/jquery.min.js') }}"></script>
+     <script src="{{ asset('assets/default/src/jquery.transit.js') }}"></script>
 	<!-- Import JS files -->
         <script src="{{ asset('assets/default/src/HUD.js') }}"></script>
         <script src="{{ asset('assets/default/src/Mouth.js') }}"></script>
@@ -109,16 +114,16 @@
             wx_img_url:  'http://{{ app.request.host }}{{ asset("assets/default/") }}{{ wechat_img_url }}'
         }
         setInterval(function(){
-            if(HUD.points > 0 && HUD.points < 309){
+            if(HUD.points > 0 && HUD.points < 150){
                 wxData.wx_desc = '我在大~ 波~ 浪~中逃了'+HUD.points+'米，浪值击败20%的人，别BB，你浪你上！';
             }
-            else if( HUD.points < 709){
+            else if( HUD.points < 300){
                 wxData.wx_desc = '我在大~ 波~ 浪~中逃了'+HUD.points+'米，浪值击败45%的人，你能超越我吗！';
             }
-            else if( HUD.points < 1009){
+            else if( HUD.points < 450){
                 wxData.wx_desc = '我在大~ 波~ 浪~中逃了'+HUD.points+'米，浪值击败65%的人，想想也是蛮拼的，敢来挑战嘛！？';
             }
-            else if( HUD.points >= 1009){
+            else if( HUD.points >= 550){
                 wxData.wx_desc = '我在大~ 波~ 浪~中逃了'+HUD.points+'米，浪值击败80%的人，无敌浪！感觉自己萌萌哒~';
             }
             //alert(wxData.wx_desc)
@@ -127,88 +132,67 @@
         },1500)
         
        wxShare(wxData);
-        var enterFrameRate;
-        var drawFrameRate;
-        if (gameIsMobile) {
-            drawFrameRate = 1000 / 4;
-            enterFrameRate = 1000 / 40;
-        } else {
-            drawFrameRate = 1000 / 60;
-            enterFrameRate = 1000 / 60;
-        }
+    var enterFrameRate;
+    var drawFrameRate;
+    if (gameIsMobile) {
+        drawFrameRate = 1000 / 4;
+        enterFrameRate = 1000 / 40;
+    } else {
+        drawFrameRate = 1000 / 60;
+        enterFrameRate = 1000 / 60;
+    }
 
-        canvas = document.getElementById('game');
-        ctx = canvas.getContext('2d');
-        hudCanvas = document.getElementById('hud');
-        hudCTX = hudCanvas.getContext('2d');
-        mouthCanvas = document.getElementById('mouth');
-        mouthCTX = mouthCanvas.getContext('2d');
-        //function alert(){} // Mutes alerts.
+    canvas = document.getElementById('game');
+    ctx = canvas.getContext('2d');
+    hudCanvas = document.getElementById('hud');
+    hudCTX = hudCanvas.getContext('2d');
+    mouthCanvas = document.getElementById('mouth');
+    mouthCTX = mouthCanvas.getContext('2d');
+    //function alert(){} // Mutes alerts.
 
-
-        function fullScreen() {
-
-            var viewportWidth = window.innerWidth;
-            var viewportHeight = window.innerHeight;
-            var ratioW = (1 + (1 - 480 / viewportWidth) + 0.2).toFixed(2);
-            var ratioH = (1 + (1 - 300 / viewportHeight) + 0.04).toFixed(2);
-            //console.log(ratioW,',',ratioH);
-            var xPosition = (viewportWidth - 480) / 2;
-            //var yPostiion = (viewportHeight-300)/2-10;
-
-            var translateValue = "transform: rotate(0deg) scale(" + ratioW + "," + ratioH + ") skew(0deg) translate(" + xPosition + "px," + 0 + "px);" +
-                "-webkit-transform: rotate(0deg) scale(" + ratioW + "," + ratioH + ") skew(0deg) translate(" + xPosition + "px," + 0 + "px);" +
-                "-moz-transform: rotate(0deg) scale(" + ratioW + "," + ratioH + ") skew(0deg) translate(" + xPosition + "px," + 0 + "px);" +
-                "-o-transform: rotate(0deg) scale(" + ratioW + "," + ratioH + ") skew(0deg) translate(" + xPosition + "px," + 0 + "px);" +
-                "-ms-transform: rotate(0deg) scale(" + ratioW + "," + ratioH + ") skew(0deg) translate(" + xPosition + "px," + 0 + "px);";
-
-            document.getElementById('content').setAttribute('style', translateValue);
-        }
+    function onResize() {
+        var domwidth = document.documentElement.clientWidth;
+        var domheight = document.documentElement.clientHeight;
 
 
 
-        window.onresize = function(event) {
+        if (domwidth < domheight) {
+            console.log('needRotate');
+            var scale = Math.max(domwidth / 300, domheight / 480);
+            var width = 300 * scale;
+            var height = 480 * scale;
 
-            //alert('test resize');
-            if (window.innerHeight > window.innerWidth) {
-                //alert("Please use Landscape! 请使用横屏");
-                //PWG.pauseGame();
-                document.body.className = "needRotate";
-
-            } else {
-                document.body.className = "noNeed";
-                if (pony.startMoving == false) {
-                    //console.log('not moving')
-                    PWG.loadArtAssets();
-                    PWG.init();
-
-                    fullScreen();
-
-                }
-
-            }
-
-            //if(pony.startMoving){
-            //PWG.init();
-            //PWG.startTheGame();
-            //}
-
-
-        };
-
-
-        if (window.innerHeight > window.innerWidth) {
-            //alert("Please use Landscape! 请使用横屏");
-            document.body.className = "needRotate";
+            $minisite.css({
+                scale: [scale, scale],
+                rotate: 90,
+                left: (width + domwidth) / 2,
+                top: -(height - domheight) / 2
+            });
 
         } else {
-            document.body.className = "noNeed";
 
-            PWG.loadArtAssets();
-            PWG.init();
-            fullScreen();
-        }
+            var scale = Math.max(domwidth / 480, domheight / 300);
+            var width = 480 * scale;
+            var height = 300 * scale;
 
+            $minisite.css({
+                scale: [scale, scale*0.85],
+                rotate: 0,
+                left: -(width - domwidth) / 2,
+                top: 0
+            });
+
+        }   
+
+    
+    }
+
+    $minisite = $('#content');
+    $(window).resize(onResize);
+    onResize();
+
+    PWG.loadArtAssets();
+    PWG.init();
         // if (window.location.host == "laysmax201.ts13.ompchina.net") {
         //     //百度代码：laysmax201.ts13.ompchina.net
         //     var _hmt = _hmt || [];

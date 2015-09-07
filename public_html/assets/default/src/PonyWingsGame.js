@@ -2,8 +2,12 @@ var PWG = {};
 PWG.timer_enterFrame = null;
 PWG.timer_draw = null;
 PWG.playGame = function() {
-    PWG.timer_enterFrame = setInterval(PWG.enterFrame, enterFrameRate);
-    PWG.timer_draw = setInterval(PWG.draw, drawFrameRate);
+    //console.log(PWG.timer_enterFrame,PWG.timer_draw);
+    //if (PWG.timer_enterFrame == null){
+        PWG.timer_enterFrame = setInterval(PWG.enterFrame, enterFrameRate);
+        PWG.timer_draw = setInterval(PWG.draw, drawFrameRate);        
+    //}
+
 }
 PWG.pauseGame = function() {
     clearInterval(PWG.timer_enterFrame);
@@ -83,7 +87,7 @@ PWG.init = function() {
 
 }
 
-PWG.artAssets = 10;
+PWG.artAssets = 9;
 PWG.loadArtAssets = function() {
 
     if (gameIsMobile) {
@@ -105,23 +109,23 @@ PWG.loadArtAssets = function() {
 
 
 
-    background.cloud.src = "assets/default/art/Cloud.png";
-    background.moutain.src = "assets/default/art/moutain.png";
-    pony.image.src = "assets/default/art/Scootaloo.png";
-    prop.image.parasprite.src = "assets/default/art/Parasprite.png";
-    HUD.timerImage.src = "assets/default/art/Timer.png";
-    Mouth.mouthUp.src = "assets/default/art/mouthUp.png";
-    Mouth.mouthDown.src = "assets/default/art/mouthDown.png";
+    background.cloud.src = "art/Cloud.png";
+    background.moutain.src = "art/moutain.png";
+    pony.image.src = "art/Scootaloo.png";
+    prop.image.parasprite.src = "art/Parasprite.png";
+    HUD.timerImage.src = "art/Timer.png";
+    Mouth.mouthUp.src = "art/mouthUp.png";
+    Mouth.mouthDown.src = "art/mouthDown.png";
     // Mouth.image.src = "art/mouth.png";
 
     //薯片材质
     //terrain.chipImage.src = "art/chip.jpg";
 
     if (!gameIsMobile) {
-        background.cloud.src = "assets/default/art/Cloud.png";
-        background.moutain.src = "assets/default/art/moutain.png";
-        prop.image.tree.src = "assets/default/art/Tree.png";
-        prop.image.burst.src = "assets/default/art/Burst.png";
+        background.cloud.src = "art/Cloud.png";
+        background.moutain.src = "art/moutain.png";
+        prop.image.tree.src = "art/Tree.png";
+        prop.image.burst.src = "art/Burst.png";
 
 
         // Music
@@ -152,6 +156,8 @@ PWG.tipEnd = function() {
     music.play();
     menu.toggleAudio();
     document.getElementById("bmusic").className = "hud_button toggle";
+    document.getElementById("instructions").style.display = "none";
+
 
     // Remove Loading Screen
     gameIsLoaded = true;
@@ -178,6 +184,9 @@ PWG.startTheGame = function() {
     PWG.enterFrame();
     PWG.draw();
     PWG.playGame();
+    music.play();
+    menu.toggleAudio();
+    
     document.getElementById("screen").style.display = "none";
     document.getElementById("invite").style.display = "block";
 
